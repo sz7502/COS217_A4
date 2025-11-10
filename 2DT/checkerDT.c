@@ -42,32 +42,38 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    return TRUE;
 }
 
-boolean CheckerDT_noDuplicateChildren(Node_T oNNode) {
+/* ASK IF THIS IS OK */
+
+/* Ensures that all children of oNNode do not share identical paths and
+   that they are in order. If they do not meet the criteria, return
+   FALSE. Otherwise, return TRUE. */
+static boolean CheckerDT_hasValidChildren(Node_T oNNode) {
+   size_t ulNumChildren = Node_getNumChildren(oNNode);
    size_t ulIndex;
    size_t ulIndex2;
-   size_t ulNumChildren = Node_getNumChildren(oNNode);
+   
    for(ulIndex = 0; ulIndex < ulNumChildren; ulIndex++)
    {
-      for (ulIndex2 = 0; ulIndex2 < ulNumChildren; ulIndex2++) 
+      for (ulIndex2 = (ulIndex + 1); ulIndex2 < ulNumChildren; ulIndex2++) 
       {
-         if (ulIndex != ulIndex2) {
-            Node_T oNChild = NULL;
-            Node_T oNChild2 = NULL;
-            int iStatus = Node_getChild(oNNode, ulIndex, &oNChild);
+         Node_T oNChild = NULL;
+         Node_T oNChild2 = NULL;
+         int iStatus = Node_getChild(oNNode, ulIndex, &oNChild);
 
-            if(iStatus != SUCCESS) {
-               continue;
-            }
+         if(iStatus != SUCCESS) {
+            continue;
+         }
 
-            iStatus = Node_getChild(oNNode, ulIndex2, &oNChild2);
+         iStatus = Node_getChild(oNNode, ulIndex2, &oNChild2);
 
-            if(iStatus != SUCCESS) {
-               continue;
-            }
+         if(iStatus != SUCCESS) {
+            continue;
+         }
 
-            if (Node_compare(oNChild, oNChild2) == 0) {
-               return FALSE;
-            }
+         /* To be in in proper order, oNChild must always be less than
+            oNChild2 */
+         if (Node_compare(oNChild, oNChild2) != -1) {
+            return FALSE;
          }
       }
    }
@@ -116,8 +122,9 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
       if(!CheckerDT_Node_isValid(oNNode))
          return FALSE;
 
-      if (!CheckerDT_noDuplicateChildren(oNNode)) {
-         fprintf(stderr, "Two children have identical paths\n");
+      if (!CheckerDT_hasValidChildren(oNNode)) {
+         fprintf(stderr, "At least two children have identical paths \
+                          or are out of order\n");
          return FALSE;
       }
 
