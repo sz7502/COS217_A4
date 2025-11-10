@@ -56,6 +56,27 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
    size_t ulIndex;
 
    if(oNNode!= NULL) {
+      Node_T parent = Node_getParent(oNNode);
+      if (parent) {
+         printf("%s: children-%u, parent-%s\n", Path_getPathname(Node_getPath(oNNode)), Node_getNumChildren(oNNode), Path_getPathname(Node_getPathName(parent)));
+      } else {
+         printf("%s: children-%u, parent-%s\n", Path_getPathname(Node_getPath(oNNode)), Node_getNumChildren(oNNode), "Orphan");
+      }
+
+      printf("Running looper\n");
+
+      for(ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++)
+      {
+         Node_T oNChild = NULL;
+         int iStatus = Node_getChild(oNNode, ulIndex, &oNChild);
+         if(iStatus != SUCCESS) {
+            printf("Looper - getNumChildren claims more children than getChild returns\n");
+         } else {
+            printf("Looper Child: %s", Path_getPathname(Node_getPath(oNNode)));
+         }
+      }
+
+      printf("\nBLOCK END\n\n\n\n");
 
       /* Sample check on each node: node must be valid */
       /* If not, pass that failure back up immediately */
