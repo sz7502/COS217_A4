@@ -51,6 +51,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    parameter list to facilitate constructing your checks.
    If you do, you should update this function comment.
 */
+/* UPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATE */
 static boolean CheckerDT_treeCheck(Node_T oNNode) {
    size_t ulIndex;
 
@@ -70,6 +71,11 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
          if(iStatus != SUCCESS) {
             fprintf(stderr, "getNumChildren claims more children than getChild returns\n");
             return FALSE;
+         }
+
+         /* Verify that the parent of the child is correct */
+         if (oNNode != Node_getParent(oNChild)) {
+            fprintf(stderr, "parent of child elemenet is invalid\n");
          }
 
          /* if recurring down one subtree results in a failed check
