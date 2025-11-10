@@ -58,7 +58,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
    if(oNNode!= NULL) {
       Node_T parent = Node_getParent(oNNode);
       if (parent) {
-         printf("%s: children-%u, parent-%s\n", Path_getPathname(Node_getPath(oNNode)), Node_getNumChildren(oNNode), Path_getPathname(Node_getPathName(parent)));
+         printf("%s: children-%u, parent-%s\n", Path_getPathname(Node_getPath(oNNode)), Node_getNumChildren(oNNode), Path_getPathname(Node_getPath(parent)));
       } else {
          printf("%s: children-%u, parent-%s\n", Path_getPathname(Node_getPath(oNNode)), Node_getNumChildren(oNNode), "Orphan");
       }
