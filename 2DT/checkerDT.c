@@ -59,6 +59,8 @@ static boolean CheckerDT_hasValidChildren(Node_T oNNode) {
          Node_T oNChild = NULL;
          Node_T oNChild2 = NULL;
          int iStatus = Node_getChild(oNNode, ulIndex, &oNChild);
+         const char* oNChildStringPath;
+         const char* oNChild2StringPath;
 
          if(iStatus != SUCCESS) {
             continue;
@@ -72,9 +74,12 @@ static boolean CheckerDT_hasValidChildren(Node_T oNNode) {
 
          /* To be in in proper order, oNChild must always be less than
             oNChild2 */
-         printf("Comparing %s with %s - Result: %i\n", Path_getPathname(Node_getPath(oNChild)), Path_getPathname(Node_getPath(oNChild2)), Node_compare(oNChild, oNChild2));
+         
+         oNChildStringPath = Path_getPathname(Node_getPath(oNChild));
+         oNChild2StringPath = Path_getPathname(Node_getPath(oNChild2));
+         printf("Comparing %s with %s - Result: %i\n", oNChildStringPath, oNChild2StringPath, strcmp(oNChild, oNChild2));
 
-         if (Node_compare(oNChild, oNChild2) >= 0) {
+         if (strcmp(oNChild, oNChild2) >= 0) {
             return FALSE;
          }
       }
