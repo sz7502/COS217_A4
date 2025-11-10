@@ -42,6 +42,38 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    return TRUE;
 }
 
+boolean CheckerDT_noDuplicateChildren(Node_T oNNode) {
+   size_t ulIndex;
+   size_t ulIndex2;
+   size_t ulNumChildren = Node_getNumChildren(oNNode);
+   for(ulIndex = 0; ulIndex < ulNumChildren; ulIndex++)
+   {
+      for (ulIndex2 = 0; ulIndex2 < ulNumChildren; ulIndex2++) 
+      {
+         if (ulIndex != ulIndex2) {
+            Node_T oNChild = NULL;
+            Node_T oNChild2 = NULL;
+            int iStatus = Node_getChild(oNNode, ulIndex, &oNChild);
+
+            if(iStatus != SUCCESS) {
+               continue;
+            }
+
+            iStatus = Node_getChild(oNNode, ulIndex2, &oNChild2);
+
+            if(iStatus != SUCCESS) {
+               continue;
+            }
+
+            if (Node_compare(oNChild, oNChild2) == 0) {
+               return FALSE;
+            }
+         }
+      }
+   }
+   return TRUE;
+}
+
 /*
    Performs a pre-order traversal of the tree rooted at oNNode.
    Returns FALSE if a broken invariant is found and
@@ -57,6 +89,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
 
    if(oNNode!= NULL) {
       Node_T parent = Node_getParent(oNNode);
+
       if (parent) {
          printf("%s: children-%u, parent-%s\n", Path_getPathname(Node_getPath(oNNode)), Node_getNumChildren(oNNode), Path_getPathname(Node_getPath(parent)));
       } else {
@@ -72,16 +105,21 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
          if(iStatus != SUCCESS) {
             printf("Looper - getNumChildren claims more children than getChild returns\n");
          } else {
-            printf("Looper Child: %s", Path_getPathname(Node_getPath(oNNode)));
+            printf("Looper Child: %s\n", Path_getPathname(Node_getPath(oNChild)));
          }
       }
 
-      printf("\nBLOCK END\n\n\n\n");
+      printf("BLOCK END\n\n\n\n");
 
       /* Sample check on each node: node must be valid */
       /* If not, pass that failure back up immediately */
       if(!CheckerDT_Node_isValid(oNNode))
          return FALSE;
+
+      if (!CheckerDT_noDuplicateChildren(oNNode)) {
+         fprintf(stderr, "Two children have identical paths\n");
+         return FALSE;
+      }
 
       /* Recur on every child of oNNode */
       for(ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++)
@@ -94,10 +132,10 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
             return FALSE;
          }
 
-         /* Verify that the parent of the child is correct */
+         /* Verify that the parent of the child is correct
          if (oNNode != Node_getParent(oNChild)) {
             fprintf(stderr, "parent of child elemenet is invalid\n");
-         }
+         }*/
 
          /* if recurring down one subtree results in a failed check
             farther down, passes the failure back up immediately */
