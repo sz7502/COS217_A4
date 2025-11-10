@@ -72,7 +72,8 @@ static boolean CheckerDT_hasValidChildren(Node_T oNNode) {
 
          /* To be in in proper order, oNChild must always be less than
             oNChild2 */
-         printf("Comparing %s with %s\n", Path_getPathname(Node_getPath(oNChild)), Path_getPathname(Node_getPath(oNChild2)));
+         printf("Comparing %s with %s\n - Result: %i", Path_getPathname(Node_getPath(oNChild)), Path_getPathname(Node_getPath(oNChild2)), Node_compare(oNChild, oNChild2));
+
          if (Node_compare(oNChild, oNChild2) < 0) {
             return FALSE;
          }
