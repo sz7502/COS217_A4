@@ -64,8 +64,9 @@ int main(void) {
   assert(DT_insert("anotherRoot") == CONFLICTING_PATH);
   assert(DT_contains("anotherRoot") == FALSE);
   assert(DT_contains("1root/2second") == FALSE);
+  assert((temp = DT_toString()) != NULL);
+  fprintf(stderr, "1 Checkpoint Promotion:\n%s\n", temp);
   assert(DT_insert("1root/2child/3grandchild") == ALREADY_IN_TREE);
-  fprintf(stderr, "Checkpoint Promotion:\n%s\n", temp);
   assert(DT_insert("anotherRoot/2nope/3noteven") == CONFLICTING_PATH);
 
   /* Trying to insert a third child should succeed, unlike in BDT */
@@ -139,6 +140,7 @@ int main(void) {
   free(temp);
   assert(DT_insert("a/x") == SUCCESS);
   assert((temp = DT_toString()) != NULL);
+  fprintf(stderr, "2 Checkpoint Promotion:\n%s\n", temp);
   assert(!strcmp(temp,"a\na/x\na/y\n"));
   free(temp);
   assert(DT_rm("a/y") == SUCCESS);
