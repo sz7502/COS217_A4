@@ -72,6 +72,7 @@ static boolean CheckerDT_hasValidChildren(Node_T oNNode) {
 
          /* To be in in proper order, oNChild must always be less than
             oNChild2 */
+         printf("Comparing %s with %s", Path_getPathname(Node_getPath(oNChild)), Path_getPathname(Node_getPath(oNChild2)));
          if (Node_compare(oNChild, oNChild2) != -1) {
             return FALSE;
          }
@@ -123,8 +124,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
          return FALSE;
 
       if (!CheckerDT_hasValidChildren(oNNode)) {
-         fprintf(stderr, "At least two children have identical paths \
-                          or are out of order\n");
+         fprintf(stderr, "At least two children have identical path or are out of order\n");
          return FALSE;
       }
 
