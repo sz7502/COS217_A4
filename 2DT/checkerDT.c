@@ -77,7 +77,6 @@ static boolean CheckerDT_hasValidChildren(Node_T oNNode) {
          
          oNChildStringPath = Path_getPathname(Node_getPath(oNChild));
          oNChild2StringPath = Path_getPathname(Node_getPath(oNChild2));
-         printf("Comparing %s with %s - Result: %i\n", oNChildStringPath, oNChild2StringPath, strcmp(oNChildStringPath, oNChild2StringPath));
 
          if (strcmp(oNChildStringPath, oNChild2StringPath) >= 0) {
             return FALSE;
@@ -155,7 +154,7 @@ static int CheckerDT_treeCheck(Node_T oNNode, int iNodeCount) {
          /* if recurring down one subtree results in a failed check
             farther down, passes the failure back up immediately */
          iNodeCount = CheckerDT_treeCheck(oNChild, iNodeCount);
-         
+
          if (iNodeCount == -1)
             return iNodeCount;
       }
@@ -178,8 +177,14 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    /* Now checks invariants recursively at each node from the root. */
    int iNodeCount = CheckerDT_treeCheck(oNRoot, 0);
    printf("iNodeCount: %i; ulCount: %u\n", iNodeCount, ulCount);
-   if (iNodeCount == -1 || iNodeCount != ulCount)
+
+   if (iNodeCount == -1)
       return FALSE;
+   
+   if (iNodeCount != ulCount) {
+      fprintf(stderr, "ulCount does not match the number of nodes in the tree\n");
+      return FALSE;
+   }
    
    return TRUE;
 }
