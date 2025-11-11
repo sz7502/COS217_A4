@@ -154,8 +154,10 @@ static int CheckerDT_treeCheck(Node_T oNNode, int iNodeCount) {
 
          /* if recurring down one subtree results in a failed check
             farther down, passes the failure back up immediately */
-         if (CheckerDT_treeCheck(oNChild, iNodeCount) == -1)
-            return -1;
+         iNodeCount = CheckerDT_treeCheck(oNChild, iNodeCount);
+         
+         if (iNodeCount == -1)
+            return iNodeCount;
       }
    }
    return iNodeCount;
