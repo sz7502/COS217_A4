@@ -97,11 +97,12 @@ static boolean CheckerDT_hasValidChildren(Node_T oNNode) {
    If you do, you should update this function comment.
 */
 /* UPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATE */
-static boolean CheckerDT_treeCheck(Node_T oNNode) {
+static int CheckerDT_treeCheck(Node_T oNNode, int iNodeCount) {
    size_t ulIndex;
 
    if(oNNode!= NULL) {
       Node_T parent = Node_getParent(oNNode);
+      iNodeCount++;
 
       if (parent) {
          printf("%s: children-%u, parent-%s\n", Path_getPathname(Node_getPath(oNNode)), Node_getNumChildren(oNNode), Path_getPathname(Node_getPath(parent)));
@@ -127,11 +128,11 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
       /* Sample check on each node: node must be valid */
       /* If not, pass that failure back up immediately */
       if(!CheckerDT_Node_isValid(oNNode))
-         return FALSE;
+         return -1;
 
       if (!CheckerDT_hasValidChildren(oNNode)) {
          fprintf(stderr, "At least two children have identical path or are out of order\n");
-         return FALSE;
+         return -1;
       }
 
       /* Recur on every child of oNNode */
@@ -142,7 +143,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
 
          if(iStatus != SUCCESS) {
             fprintf(stderr, "getNumChildren claims more children than getChild returns\n");
-            return FALSE;
+            return -1;
          }
 
          /* Verify that the parent of the child is correct
@@ -152,11 +153,11 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
 
          /* if recurring down one subtree results in a failed check
             farther down, passes the failure back up immediately */
-         if(!CheckerDT_treeCheck(oNChild))
-            return FALSE;
+         if (CheckerDT_treeCheck(oNChild, iNodeCount) == -1)
+            return -1;
       }
    }
-   return TRUE;
+   return iNodeCount;
 }
 
 /* see checkerDT.h for specification */
@@ -172,5 +173,9 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
       }
 
    /* Now checks invariants recursively at each node from the root. */
-   return CheckerDT_treeCheck(oNRoot);
+   int iNodeCount = CheckerDT_treeCheck(oNRoot, 0);
+   if (iNodeCount == -1 || iNodeCount != ulCount)
+      return FALSE;
+   
+   return TRUE;
 }
