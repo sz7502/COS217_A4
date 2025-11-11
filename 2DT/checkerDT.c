@@ -102,7 +102,7 @@ static int CheckerDT_treeCheck(Node_T oNNode, int iNodeCount) {
    if(oNNode!= NULL) {
       Node_T parent = Node_getParent(oNNode);
       iNodeCount++;
-
+      /*
       if (parent) {
          printf("%s: children-%u, parent-%s\n", Path_getPathname(Node_getPath(oNNode)), Node_getNumChildren(oNNode), Path_getPathname(Node_getPath(parent)));
       } else {
@@ -124,7 +124,7 @@ static int CheckerDT_treeCheck(Node_T oNNode, int iNodeCount) {
       }
 
       printf("BLOCK END\n\n\n\n");
-
+      */
       /* Sample check on each node: node must be valid */
       /* If not, pass that failure back up immediately */
       if(!CheckerDT_Node_isValid(oNNode))
@@ -176,7 +176,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
 
    /* Now checks invariants recursively at each node from the root. */
    int iNodeCount = CheckerDT_treeCheck(oNRoot, 0);
-   printf("iNodeCount: %i; ulCount: %u\n", iNodeCount, ulCount);
+   //printf("iNodeCount: %i; ulCount: %u\n", iNodeCount, ulCount);
 
    if (iNodeCount == -1)
       return FALSE;
