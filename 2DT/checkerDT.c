@@ -176,7 +176,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
 
    /* Now checks invariants recursively at each node from the root. */
    int iNodeCount = CheckerDT_treeCheck(oNRoot, 0);
-   //printf("iNodeCount: %i; ulCount: %u\n", iNodeCount, ulCount);
+   /*printf("iNodeCount: %i; ulCount: %u\n", iNodeCount, ulCount);*/
 
    if (iNodeCount == -1)
       return FALSE;
