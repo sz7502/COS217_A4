@@ -60,6 +60,7 @@ static boolean CheckerDT_Node_hasValidChildren(Node_T oNNode) {
    
    for(ulIndex = 0; ulIndex < ulNumChildren; ulIndex++)
    {
+      /* Only compares current child to those after it */
       for (ulIndex2 = (ulIndex + 1); ulIndex2 < ulNumChildren; ulIndex2++) 
       {
          Node_T oNChild = NULL;
@@ -100,14 +101,12 @@ static boolean CheckerDT_Node_hasValidChildren(Node_T oNNode) {
 
 /*
    Performs a pre-order traversal of the tree rooted at oNNode.
-   Returns FALSE if a broken invariant is found and
-   returns TRUE otherwise.
+   treeData->valid is set to FALSE if a broken invariant is found or
+   remains unchanged otherwise.
 
-   You may want to change this function's return type or
-   parameter list to facilitate constructing your checks.
-   If you do, you should update this function comment.
+   For each oNNode iterated through which is not NULL, treeData->ulCount
+   is incremented by one;
 */
-/* UPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATE */
 static void CheckerDT_treeCheck(Node_T oNNode, TreeData *treeData) {
    size_t ulIndex;
 
