@@ -11,6 +11,11 @@
 #include "path.h"
 
 
+struct TreeData {
+   size_t ulCount;
+   boolean valid;
+} typedef TreeData;
+
 
 /* see checkerDT.h for specification */
 boolean CheckerDT_Node_isValid(Node_T oNNode) {
@@ -57,6 +62,7 @@ static boolean CheckerDT_Node_hasValidChildren(Node_T oNNode) {
          Node_T oNChild = NULL;
          Node_T oNChild2 = NULL;
          int iStatus = Node_getChild(oNNode, ulIndex, &oNChild);
+         int compareResult;
          const char* oNChildStringPath;
          const char* oNChild2StringPath;
 
@@ -76,15 +82,15 @@ static boolean CheckerDT_Node_hasValidChildren(Node_T oNNode) {
          oNChildStringPath = Path_getPathname(Node_getPath(oNChild));
          oNChild2StringPath = Path_getPathname(Node_getPath(oNChild2));
 
-         int compareResult = strcmp(oNChildStringPath, oNChild2StringPath);
+         compareResult = strcmp(oNChildStringPath, oNChild2StringPath);
 
          if (compareResult == 0) {
-            fprintf(stderr, "Atleast two children of a node have" 
+            fprintf(stderr, "Atleast two children of a node have " 
                             "identical paths\n");
             return FALSE;
          }
          if (compareResult >= 0) {
-            fprintf(stderr, "Atleast two children of a node are out of"
+            fprintf(stderr, "Atleast two children of a node are out of "
                             "lexicographic order\n");
             return FALSE;
          }
@@ -103,20 +109,21 @@ static boolean CheckerDT_Node_hasValidChildren(Node_T oNNode) {
    If you do, you should update this function comment.
 */
 /* UPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATE */
-static size_t CheckerDT_treeCheck(Node_T oNNode, size_t ulNodeCount) {
+static void CheckerDT_treeCheck(Node_T oNNode, TreeData *treeData) {
    size_t ulIndex;
 
    if(oNNode!= NULL) {
-      Node_T parent = Node_getParent(oNNode);
-      ulNodeCount++;
+      treeData->ulCount++;
       
       /* Sample check on each node: node must be valid */
       /* If not, pass that failure back up immediately */
       if(!CheckerDT_Node_isValid(oNNode))
-         return -1;
+         treeData->valid = FALSE;
+         return;
 
       if (!CheckerDT_Node_hasValidChildren(oNNode)) {
-         return -1;
+         treeData->valid = FALSE;
+         return;
       }
 
       /* Recur on every child of oNNode */
@@ -127,24 +134,25 @@ static size_t CheckerDT_treeCheck(Node_T oNNode, size_t ulNodeCount) {
 
          if(iStatus != SUCCESS) {
             fprintf(stderr, "getNumChildren claims more children than getChild returns\n");
-            return -1;
+            treeData->valid = FALSE;
+            return;
          }
 
          /* if recurring down one subtree results in a failed check
             farther down, passes the failure back up immediately */
-         ulNodeCount = CheckerDT_treeCheck(oNChild, ulNodeCount);
-
-         if (ulNodeCount == -1)
-            return ulNodeCount;
+         CheckerDT_treeCheck(oNChild, treeData);
+         if (!treeData->valid)
+            return;
       }
    }
-   return ulNodeCount;
 }
 
 /* see checkerDT.h for specification */
 boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
                           size_t ulCount) {
-   size_t ulNodeCount;
+   TreeData treeData;
+   treeData.ulCount = 0;
+   treeData.valid = TRUE;
 
    /* Sample check on a top-level data structure invariant:
       if the DT is not initialized, its count should be 0. */
@@ -155,12 +163,12 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
       }
 
    /* Now checks invariants recursively at each node from the root. */
-   ulNodeCount = CheckerDT_treeCheck(oNRoot, 0);
+   CheckerDT_treeCheck(oNRoot, &treeData);
 
-   if (ulNodeCount == -1)
+   if (!treeData.valid)
       return FALSE;
    
-   if (ulNodeCount != ulCount) {
+   if (treeData.ulCount != ulCount) {
       fprintf(stderr, "ulCount does not match the number of nodes in the tree\n");
       return FALSE;
    }
