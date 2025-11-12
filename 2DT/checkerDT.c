@@ -11,10 +11,10 @@
 #include "path.h"
 
 
-struct TreeData {
+typedef struct TreeData {
    size_t ulCount;
    boolean valid;
-} typedef TreeData;
+} TreeData;
 
 
 /* see checkerDT.h for specification */
@@ -117,9 +117,10 @@ static void CheckerDT_treeCheck(Node_T oNNode, TreeData *treeData) {
       
       /* Sample check on each node: node must be valid */
       /* If not, pass that failure back up immediately */
-      if(!CheckerDT_Node_isValid(oNNode))
+      if(!CheckerDT_Node_isValid(oNNode)) {
          treeData->valid = FALSE;
          return;
+      }
 
       if (!CheckerDT_Node_hasValidChildren(oNNode)) {
          treeData->valid = FALSE;
