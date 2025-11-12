@@ -11,8 +11,11 @@
 #include "path.h"
 
 
+/* TreeData describes the tree being iterated through */
 typedef struct TreeData {
+   /* The amount of nodes CheckerDT_treeCheck has iterated through. */
    size_t ulCount;
+   /* If the tree's nodes are valid */
    boolean valid;
 } TreeData;
 
@@ -75,9 +78,6 @@ static boolean CheckerDT_Node_hasValidChildren(Node_T oNNode) {
          if(iStatus != SUCCESS) {
             continue;
          }
-
-         /* To be in in proper order, oNChild must always be less than
-            oNChild2 */
          
          oNChildStringPath = Path_getPathname(Node_getPath(oNChild));
          oNChild2StringPath = Path_getPathname(Node_getPath(oNChild2));
@@ -88,8 +88,7 @@ static boolean CheckerDT_Node_hasValidChildren(Node_T oNNode) {
             fprintf(stderr, "Atleast two children of a node have " 
                             "identical paths\n");
             return FALSE;
-         }
-         if (compareResult >= 0) {
+         } else if (compareResult >= 0) {
             fprintf(stderr, "Atleast two children of a node are out of "
                             "lexicographic order\n");
             return FALSE;
@@ -111,6 +110,8 @@ static boolean CheckerDT_Node_hasValidChildren(Node_T oNNode) {
 /* UPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATEUPDATE */
 static void CheckerDT_treeCheck(Node_T oNNode, TreeData *treeData) {
    size_t ulIndex;
+
+   assert(treeData != NULL);
 
    if(oNNode!= NULL) {
       treeData->ulCount++;
