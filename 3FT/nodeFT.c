@@ -6,8 +6,8 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
-#include "dynarray.h"
 #include "nodeFT.h"
+#include "dynarray.h"
 
 /* A node in a DT */
 struct node {
