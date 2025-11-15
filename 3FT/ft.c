@@ -1,3 +1,5 @@
+/* ft.c */
+
 #include <string.h>
 #include <assert.h>
 #include <stdlib.h>
@@ -5,14 +7,33 @@
 #include "nodeFT.h"
 #include "dynarray.h"
 
+/*
+  A File Tree is a representation of a hierarchy of directories and 
+  files, represented as an AO with 3 state variables:
+*/
+
+/* 1. a flag for being in an initialized state (TRUE) or not (FALSE) */
 static boolean bIsInitialized;
+/* 2. a pointer to the root node in the hierarchy */
 static Node_T oNRoot;
+/* 3. a counter of the number of nodes in the hierarchy */
 static size_t ulCount;
 
-/* MOVE INIT CHECKS MAYBE */
+
+
+/* --------------------------------------------------------------------
+
+  The FT_traversePath and FT_findNode functions modularize the common
+  functionality of going as far as possible down an DT towards a path
+  and returning either the node of however far was reached or the
+  node if the full path was reached, respectively.
+
+  The FT_insertNode and FT_rmNode functions modularize the common
+  functionality of inserting and removing a node of a specific type.
+*/
 
 /*
-  Traverses the DT starting at the root as far as possible towards
+  Traverses the FT starting at the root as far as possible towards
   absolute path oPPath. If able to traverse, returns an int SUCCESS
   status and sets *poNFurthest to the furthest node reached (which may
   be only a prefix of oPPath, or even NULL if the root is NULL).
@@ -93,7 +114,7 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest)
 }
 
 /*
-  Traverses the DT to find a node with absolute path pcPath. Returns a
+  Traverses the FT to find a node with absolute path pcPath. Returns a
   int SUCCESS status and sets *poNResult to be the node, if found.
   Otherwise, sets *poNResult to NULL and returns with status:
   * INITIALIZATION_ERROR if the DT is not in an initialized state
@@ -145,6 +166,20 @@ static int FT_findNode(const char *pcPath, Node_T *poNResult)
    return SUCCESS;
 }
 
+/*
+   Inserts a new node into the FT with absolute path pcPath and type
+   nodeType. If the nodeType is NODE_FILE, the node's contents are set
+   to pvContents and the node's size field is set to ulLength. Returns 
+   SUCCESS if the new node is inserted successfully.
+   Otherwise, returns:
+   * INITIALIZATION_ERROR if the FT is not in an initialized state
+   * BAD_PATH if pcPath does not represent a well-formatted path
+   * CONFLICTING_PATH if the root exists but is not a prefix of pcPath,
+                      or if the node is a file and would be the FT root
+   * NOT_A_DIRECTORY if a proper prefix of pcPath exists as a file
+   * ALREADY_IN_TREE if pcPath is already in the FT (as dir or file)
+   * MEMORY_ERROR if memory could not be allocated to complete request
+*/
 static int FT_insertNode(const char *pcPath, NodeType nodeType,
                          void *pvContents, size_t ulLength)
 {
@@ -266,6 +301,20 @@ static int FT_insertNode(const char *pcPath, NodeType nodeType,
    return SUCCESS;
 }
 
+/*
+  Removes the FT node with absolute path pcPath and type nodeType.
+  Returns SUCCESS if found and removed.
+  Otherwise, returns:
+  * INITIALIZATION_ERROR if the FT is not in an initialized state
+  * BAD_PATH if pcPath does not represent a well-formatted path
+  * CONFLICTING_PATH if the root exists but is not a prefix of pcPath
+  * NO_SUCH_PATH if absolute path pcPath does not exist in the FT
+  * NOT_A_DIRECTORY if nodeType is NODE_DIR and pcPath is in the FT as
+  * a file not a directory
+  * NOT_A_FILE if nodeType is NODE_FILE and pcPath is in the FT as
+  * a directory not a file
+  * MEMORY_ERROR if memory could not be allocated to complete request
+*/
 static int FT_rmNode(const char *pcPath, NodeType nodeType)
 {
    int iStatus;
@@ -330,6 +379,8 @@ int FT_insertFile(const char *pcPath, void *pvContents,
 
    return FT_insertNode(pcPath, NODE_FILE, pvContents, ulLength);
 }
+/*--------------------------------------------------------------------*/
+
 
 boolean FT_containsFile(const char *pcPath)
 {

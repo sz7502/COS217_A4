@@ -11,19 +11,23 @@
 #include "path.h"
 
 
+/* An enum to represent the different filetypes*/
 typedef enum {
+  /* NODE_DIR represents a node in the FT intended to be a directory */
    NODE_DIR,
+  /* NODE_FILE represents a node in the FT intended to be a file */
    NODE_FILE
+  /* The NodeType typedef helps code readability */
 } NodeType;
 
 /* A Node_T is a node in a Directory Tree */
 typedef struct node *Node_T;
 
 /*
-  Creates a new node in the Directory Tree, with path oPPath and
-  parent oNParent. Returns an int SUCCESS status and sets *poNResult
-  to be the new node if successful. Otherwise, sets *poNResult to NULL
-  and returns status:
+  Creates a new node in the Directory Tree, with path oPPath, type
+  nodeType and parent oNParent. Returns an int SUCCESS status and sets 
+  *poNResult to be the new node if successful. Otherwise, sets 
+  *poNResult to NULL and returns status:
   * MEMORY_ERROR if memory could not be allocated to complete request
   * CONFLICTING_PATH if oNParent's path is not an ancestor of oPPath
   * NO_SUCH_PATH if oPPath is of depth 0
@@ -41,17 +45,25 @@ int Node_new(Path_T oPPath, NodeType nodeType, Node_T oNParent,
 */
 size_t Node_free(Node_T oNNode);
 
+/*
+  Returns a pointer to the contents field of oNNode.
+*/
 void *Node_getContent(Node_T oNNode);
 
+/* Returns the contents size field of oNNode. */
 size_t Node_getContentSize(Node_T oNNode);
-/* ulLength must include null terminator */
-int Node_setContents(Node_T oNNode, void* pvContents, size_t ulLength);
+
+/*
+  Sets the contents of oNNode to pvContents and the size field of oNNode
+  to ulLength. 
+*/
+void Node_setContents(Node_T oNNode, void* pvContents, size_t ulLength);
 
 /* Returns the path object representing oNNode's absolute path. */
 Path_T Node_getPath(Node_T oNNode);
 
+/* Returns the type field of oNNode */
 NodeType Node_getType(Node_T oNNode);
-
 
 /*
   Returns TRUE if oNParent has a child with path oPPath. Returns

@@ -180,7 +180,7 @@ size_t Node_getContentSize(Node_T oNNode) {
 }
 
 
-int Node_setContents(Node_T oNNode, void* pvContents, size_t ulLength) {
+void Node_setContents(Node_T oNNode, void* pvContents, size_t ulLength) {
    assert(oNNode != NULL);
    
    oNNode->pvContents = pvContents;
