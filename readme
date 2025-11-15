@@ -114,7 +114,6 @@ express your disagreement after each warning. If there are no
 warnings, then write "None."
 
 
-
 ------------------------------------------------------------------------
 What warnings does critTer generate on checkerDT.c, and what are your
 disagreements with them? Copy the critTer warnings here, and express
@@ -129,15 +128,30 @@ your disagreements with them? Copy the splint warnings here, and
 express your disagreement after each warning. If there are no
 warnings, then write "None."
 
-nodeFT.c:156:48: Variable ulIndex used before definition
+ft.c: (in function FT_traversePath)
+ft.c:95:42: Variable ulChildID used before definition
   An rvalue is used that may not be initialized to a value on some execution
   path. (Use -usedef to inhibit warning)
-nodeFT.c: (in function Node_free)
-nodeFT.c:205:35: Variable ulIndex used before definition
-path.h:24:5: Function Path_new declared but not defined
-  A function or variable is declared, but not defined in any source code file.
-  (Use -declundef to inhibit warning)
+ft.c: (in function FT_getFileContents)
+ft.c:432:27: Variable oNNode used before definition
+ft.c: (in function FT_replaceFileContents)
+ft.c:451:36: Variable oNNode used before definition
+ft.c: (in function FT_stat)
+ft.c:472:30: Variable oNNode used before definition
 
+All the above errors are caused because the variables are passed by 
+reference and initialized by another function. These function calls have 
+a status check to ensure the function succeeded. Since the functions
+succeeded, it is safe to assume that the variables are initialized.
+
+There are lots of errors about how a function is declared but not 
+defined. These errors are not accurate since they are defined in the .c
+files. However, critTer does not appear to be able to access the .c
+files, it is only accessing the .h files with the declarations.
+The files are:
+path.h
+nodeFT.h
+dynarray.h
 
 ------------------------------------------------------------------------
 What warnings does critTer generate on your Part 3 code, and what are

@@ -17,6 +17,7 @@ typedef struct TreeData {
    size_t ulCount;
    /* If the tree's nodes are valid */
    boolean valid;
+   /* This typedef helps make code more condensed and readable */
 } TreeData;
 
 
