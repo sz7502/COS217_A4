@@ -200,8 +200,7 @@ static int FT_insertNode(const char *pcPath, NodeType nodeType,
 
       /* oNCurr is the node we're trying to insert */
       if (ulIndex == ulDepth + 1 && !Path_comparePath(oPPath,
-                                             Node_getPath(oNCurr)));
-      {
+                                             Node_getPath(oNCurr))) {
          Path_free(oPPath);
          return ALREADY_IN_TREE;
       }
