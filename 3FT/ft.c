@@ -340,6 +340,8 @@ static int FT_rmNode(const char *pcPath, NodeType nodeType)
 
 int FT_insertDir(const char *pcPath)
 {
+   assert(pcPath != NULL);
+   
    if (!bIsInitialized)
       return INITIALIZATION_ERROR;
 
@@ -365,6 +367,8 @@ boolean FT_containsDir(const char *pcPath)
 
 int FT_rmDir(const char *pcPath)
 {
+   assert(pcPath != NULL);
+
    if (!bIsInitialized)
       return INITIALIZATION_ERROR;
 
@@ -374,6 +378,8 @@ int FT_rmDir(const char *pcPath)
 int FT_insertFile(const char *pcPath, void *pvContents,
                   size_t ulLength)
 {
+   assert(pcPath != NULL);
+
    if (!bIsInitialized)
       return INITIALIZATION_ERROR;
 
@@ -401,6 +407,8 @@ boolean FT_containsFile(const char *pcPath)
 
 int FT_rmFile(const char *pcPath)
 {
+   assert(pcPath != NULL);
+   
    if (!bIsInitialized)
       return INITIALIZATION_ERROR;
 
