@@ -71,15 +71,13 @@ static boolean CheckerDT_Node_hasValidChildren(Node_T oNNode) {
          const char* oNChildStringPath;
          const char* oNChild2StringPath;
 
-         if(iStatus != SUCCESS) {
+         if(iStatus != SUCCESS)
             continue;
-         }
 
          iStatus = Node_getChild(oNNode, ulIndex2, &oNChild2);
 
-         if(iStatus != SUCCESS) {
+         if(iStatus != SUCCESS)
             continue;
-         }
          
          oNChildStringPath = Path_getPathname(Node_getPath(oNChild));
          oNChild2StringPath = Path_getPathname(Node_getPath(oNChild2));

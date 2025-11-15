@@ -120,7 +120,13 @@ disagreements with them? Copy the critTer warnings here, and express
 your disagreement after each warning. If there are no warnings, then
 write "None."
 
+   checkerDT.c: line 63: low priority: 
+   A loop should consist of fewer than 35 lines;
+   this loop consists of 36 lines; consider refactoring
 
+I believe going a line over the limit is reasonable for this function.
+Since it identifies two different invariants and splitting it up does
+not make much sense given how few. 
 
 ------------------------------------------------------------------------
 What warnings does splint generate on your Part 3 code, and what are
