@@ -178,8 +178,8 @@ static int FT_insertNode(const char *pcPath, NodeType nodeType,
       return CONFLICTING_PATH;
    }
 
-   /* The parent node we're inserting to must be a directory */
-   if (Node_getType(oNCurr) != NODE_DIR)
+   /* The parent node we're inserting to must be a directory or root */
+   if ((oNCurr != NULL) && (Node_getType(oNCurr) != NODE_DIR))
    {
       Path_free(oPPath);
       return NOT_A_DIRECTORY;
