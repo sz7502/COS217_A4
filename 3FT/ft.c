@@ -289,7 +289,7 @@ static int FT_rmNode(const char *pcPath, NodeType nodeType)
 
 int FT_insertDir(const char *pcPath)
 {
-   if (bIsInitialized)
+   if (!bIsInitialized)
       return INITIALIZATION_ERROR;
 
    return FT_insertNode(pcPath, NODE_DIR, NULL, 0);
@@ -302,8 +302,8 @@ boolean FT_containsDir(const char *pcPath)
 
    assert(pcPath != NULL);
 
-   if (bIsInitialized)
-      return INITIALIZATION_ERROR;
+   if (!bIsInitialized)
+      return FALSE;
 
    iStatus = FT_findNode(pcPath, &oNFound);
    if (iStatus == SUCCESS)
@@ -314,7 +314,7 @@ boolean FT_containsDir(const char *pcPath)
 
 int FT_rmDir(const char *pcPath)
 {
-   if (bIsInitialized)
+   if (!bIsInitialized)
       return INITIALIZATION_ERROR;
 
    return FT_rmNode(pcPath, NODE_DIR);
@@ -323,7 +323,7 @@ int FT_rmDir(const char *pcPath)
 int FT_insertFile(const char *pcPath, void *pvContents,
                   size_t ulLength)
 {
-   if (bIsInitialized)
+   if (!bIsInitialized)
       return INITIALIZATION_ERROR;
 
    return FT_insertNode(pcPath, NODE_FILE, pvContents, ulLength);
@@ -336,8 +336,8 @@ boolean FT_containsFile(const char *pcPath)
 
    assert(pcPath != NULL);
 
-   if (bIsInitialized)
-      return INITIALIZATION_ERROR;
+   if (!bIsInitialized)
+      return FALSE;
 
    iStatus = FT_findNode(pcPath, &oNFound);
    if (iStatus == SUCCESS)
@@ -348,7 +348,7 @@ boolean FT_containsFile(const char *pcPath)
 
 int FT_rmFile(const char *pcPath)
 {
-   if (bIsInitialized)
+   if (!bIsInitialized)
       return INITIALIZATION_ERROR;
 
    return FT_rmNode(pcPath, NODE_FILE);
@@ -361,8 +361,8 @@ void *FT_getFileContents(const char *pcPath)
 
    assert(pcPath != NULL);
 
-   if (bIsInitialized)
-      return INITIALIZATION_ERROR;
+   if (!bIsInitialized)
+      return NULL;
 
    iStatus = FT_findNode(pcPath, &oNNode);
    if (iStatus != SUCCESS)
@@ -380,8 +380,8 @@ void *FT_replaceFileContents(const char *pcPath, void *pvNewContents,
 
    assert(pcPath != NULL);
 
-   if (bIsInitialized)
-      return INITIALIZATION_ERROR;
+   if (!bIsInitialized)
+      return NULL;
 
    iStatus = FT_findNode(pcPath, &oNNode);
    if (iStatus != SUCCESS)
@@ -401,7 +401,7 @@ int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize)
    assert(pbIsFile != NULL);
    assert(pulSize != NULL);
 
-   if (bIsInitialized)
+   if (!bIsInitialized)
       return INITIALIZATION_ERROR;
 
    iStatus = FT_findNode(pcPath, &oNNode);
@@ -418,7 +418,7 @@ int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize)
 
 int FT_init(void)
 {
-   if (bIsInitialized)
+   if (!bIsInitialized)
       return INITIALIZATION_ERROR;
 
    bIsInitialized = TRUE;
