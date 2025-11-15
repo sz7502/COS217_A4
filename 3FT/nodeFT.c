@@ -164,8 +164,6 @@ int Node_new(Path_T oPPath, NodeType nodeType, Node_T oNParent,
 
    *poNResult = psNew;
 
-   assert(oNParent == NULL);
-
    return SUCCESS;
 }
 
