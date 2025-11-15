@@ -418,7 +418,7 @@ int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize)
 
 int FT_init(void)
 {
-   if (!bIsInitialized)
+   if (bIsInitialized)
       return INITIALIZATION_ERROR;
 
    bIsInitialized = TRUE;
