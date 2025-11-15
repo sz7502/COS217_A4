@@ -3,7 +3,7 @@ Assignment 4 readme File
 ------------------------------------------------------------------------
 Student 1: What is your name?
 
-
+Stanislav Zhelokhovtsev
 
 ------------------------------------------------------------------------
 Student 2: What is your name?
@@ -17,7 +17,9 @@ information given in the "Policies" web page (also available on armlab
 in the file ~cos217/AuthorizedSourcesList ) to this section of the
 readme file, and edit it as appropriate.
 
-
+COS 217 lecture materials.
+COS 217 precept materials.
+COS 217 website.
 
 ------------------------------------------------------------------------
 Student 2: What authorized sources of information did you use to
@@ -40,7 +42,7 @@ nature of the interaction, may additionally require the interaction
 being reported to the Committee on Discipline. Write "None" if you used
 no unauthorized sources of information.
 
-
+None
 
 ------------------------------------------------------------------------
 Student 2: What unauthorized sources of information did you use to
@@ -64,7 +66,7 @@ guide, enter your name in the space below the following affirmation:
 This paper represents my own work in accordance with University
 regulations.
 
-
+Stanislav Zhelokhovtsev
 
 ------------------------------------------------------------------------
 Student 2: In fulfillment of the requirement from section 2.4.3 of the
@@ -82,13 +84,15 @@ Regulations in Princeton's Rights, Rules, Responsibilities guide,
 and the COS 217 Generative AI policy, disclose and describe how you
 used AI in completing this assignment:
 
-
+None
 
 ------------------------------------------------------------------------
 Student 1: What is your assessment of the assignment? Was it helpful?
 Was it fun?
 
-
+I thought that the first two parts of the assignment were helpful and I
+learned a good amount. Those parts were also enjoyable. However, I felt
+like part 3 was a lot of busywork after the initial planning.
 
 ------------------------------------------------------------------------
 Student 2: What is your assessment of the assignment? Was it helpful?
@@ -125,6 +129,14 @@ your disagreements with them? Copy the splint warnings here, and
 express your disagreement after each warning. If there are no
 warnings, then write "None."
 
+nodeFT.c:156:48: Variable ulIndex used before definition
+  An rvalue is used that may not be initialized to a value on some execution
+  path. (Use -usedef to inhibit warning)
+nodeFT.c: (in function Node_free)
+nodeFT.c:205:35: Variable ulIndex used before definition
+path.h:24:5: Function Path_new declared but not defined
+  A function or variable is declared, but not defined in any source code file.
+  (Use -declundef to inhibit warning)
 
 
 ------------------------------------------------------------------------
@@ -133,8 +145,25 @@ your disagreements with them? Copy the critTer warnings here, and
 express your disagreement after each warning. If there are no
 warnings, then write "None."
 
+   ft.c: line 185: medium priority:
+   Do you want to validate 'pvContents' through an assert?
 
+FT_insertNode could insert a file with NULL contents. Therefore, it is
+ok for pvContents to be NULL. If FT_insertNode is inserting a directory,
+it does not check pvContents at all, so it is ok for pvContents to be 
+NULL in that case too.
 
+   ft.c: line 380: medium priority:
+   Do you want to validate 'pvContents' through an assert?
+
+FT_insertFile could be called with pvContents NULL since a file can have
+NULL contents. Therefore, it is ok for pvContents to be NULL.
+
+   ft.c: line 437: medium priority:
+   Do you want to validate 'pvNewContents' through an assert?
+
+FT_replaceFileContents could be called with pvContents NULL since a file
+can have NULL contents. Therefore, it is ok for pvContents to be NULL.
 ------------------------------------------------------------------------
 For each of the five faulty BDT implementations required by Step
 1.5, identify the function where there is a bug. You do not have to
