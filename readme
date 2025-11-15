@@ -112,7 +112,15 @@ What warnings does splint generate for Part 2's checker, and what are
 your disagreements with them? Copy the splint warnings here, and
 express your disagreement after each warning. If there are no
 warnings, then write "None."
+      
+checkerDT.h:17:9: Function exported but not used outside checkerDT:
+                     CheckerDT_Node_isValid
+CheckerDT_Node_isValid is used in nodeDTGood.c so this error is false
 
+There are lots of errors about how a function is declared but not 
+defined. These errors are not accurate since they are defined in the .c
+files. However, critTer does not appear to be able to access the .c
+files, it is only accessing the .h files with the declarations.
 
 ------------------------------------------------------------------------
 What warnings does critTer generate on checkerDT.c, and what are your
@@ -120,13 +128,7 @@ disagreements with them? Copy the critTer warnings here, and express
 your disagreement after each warning. If there are no warnings, then
 write "None."
 
-   checkerDT.c: line 63: low priority: 
-   A loop should consist of fewer than 35 lines;
-   this loop consists of 36 lines; consider refactoring
-
-I believe going a line over the limit is reasonable for this function.
-Since it identifies two different invariants and splitting it up does
-not make much sense given how few. 
+"None."
 
 ------------------------------------------------------------------------
 What warnings does splint generate on your Part 3 code, and what are
@@ -184,6 +186,7 @@ NULL contents. Therefore, it is ok for pvContents to be NULL.
 
 FT_replaceFileContents could be called with pvContents NULL since a file
 can have NULL contents. Therefore, it is ok for pvContents to be NULL.
+
 ------------------------------------------------------------------------
 For each of the five faulty BDT implementations required by Step
 1.5, identify the function where there is a bug. You do not have to
@@ -194,21 +197,32 @@ the error manifests itself or is "noticed" by the client.
 
       Executable         Function with the underlying error
 ===============================================================
-         ./bdtBad1        
+         ./bdtBad1       BDT_insert 
 ---------------------------------------------------------------
-         ./bdtBad2        
+         ./bdtBad2       BDT_preOrderTraversal 
 ---------------------------------------------------------------
-         ./bdtBad3        
+         ./bdtBad3       BDT_addChild 
 ---------------------------------------------------------------
-         ./bdtBad4        
+         ./bdtBad4       BDT_toString 
 ---------------------------------------------------------------
-         ./bdtBad5        
+         ./bdtBad5       BDT_findNode 
 ===============================================================
 
 ------------------------------------------------------------------------
 What are your critiques of the given DT implementations, as
 specified in Step 2.5?
 
+DT_preOrderTraversal(Node_T n, DynArray_T d, size_t i) 
+-could use more verbose parameter names
 
+int Node_compare(Node_T oNFirst, Node_T oNSecond)
+-should be static since it is only used in nodeDT.c
 
+int Node_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult)
+-parameter order should be changed to match the other functions in the 
+ file. The other function in the header start with a Node_T and end with
+ result Node_T. So order should be: oNParent, oPPath, poNResult. 
+
+-The code would be more readable by typedefing the enum iStatus uses.
+ Using an enum typedef is more clear than just an int.
 ------------------------------------------------------------------------
