@@ -191,8 +191,10 @@ static int FT_insertNode(const char *pcPath, NodeType nodeType,
       ulIndex = 1;
 
       /* a file cannot be a root */
-      if (nodeType == NODE_FILE)
+      if (nodeType == NODE_FILE) {
+         Path_free(oPPath);
          return CONFLICTING_PATH;
+      }
    }
    else
    {
